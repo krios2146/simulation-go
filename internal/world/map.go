@@ -19,6 +19,11 @@ func NewMap(height uint8, width uint8) *Map {
 	}
 }
 
+func (m *Map) IsEmpty(c coordinates.Coordinates) bool {
+	_, occupied := m.values[c]
+	return !occupied
+}
+
 func (m *Map) Find(coordinates coordinates.Coordinates) (entity entities.Entity, found bool) {
 	entity, found = m.values[coordinates]
 	return
@@ -27,9 +32,9 @@ func (m *Map) Find(coordinates coordinates.Coordinates) (entity entities.Entity,
 func (m *Map) FindCreatures() []entities.Creature {
 	creatures := []entities.Creature{}
 
-	for _, entity := range m.values {
-		if entity.CanMove() {
-			creatures = append(creatures, entity.(entities.Creature))
+	for _, v := range m.values {
+		if c, ok := v.(entities.Creature); ok {
+			creatures = append(creatures, c)
 		}
 	}
 
