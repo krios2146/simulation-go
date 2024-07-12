@@ -10,22 +10,24 @@ type Predator struct {
 	Coordinates  coordinates.Coordinates
 	Speed        uint8
 	AttackRating uint8
-	Sprite       rune
 }
 
 type Herbivore struct {
 	Coordinates coordinates.Coordinates
 	Speed       uint8
 	Health      uint8
-	Sprite      rune
 }
 
 type Creature interface {
 	MakeMove()
 }
 
-func (p Predator) CanMove() bool {
-	return true
+func (p Predator) New(c coordinates.Coordinates) Entity {
+	return &Predator{
+		Coordinates:  c,
+		Speed:        2,
+		AttackRating: 50,
+	}
 }
 
 func (p *Predator) MakeMove() {
@@ -43,8 +45,12 @@ func (p Predator) String() string {
 	)
 }
 
-func (h Herbivore) CanMove() bool {
-	return true
+func (h Herbivore) New(c coordinates.Coordinates) Entity {
+	return &Herbivore{
+		Coordinates: c,
+		Speed:       1,
+		Health:      100,
+	}
 }
 
 func (h *Herbivore) MakeMove() {
