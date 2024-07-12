@@ -5,7 +5,7 @@ import (
 )
 
 type Entity interface {
-	CanMove() bool // Effectively indicates whether Entity is Creature or not
+	New(coordinates coordinates.Coordinates) Entity
 }
 
 type Grass struct {
@@ -21,8 +21,8 @@ type Tree struct {
 	coordinates.Coordinates
 }
 
-func (g Grass) CanMove() bool {
-	return false
+func (g Grass) New(c coordinates.Coordinates) Entity {
+	return &Grass{Coordinates: c}
 }
 
 func (g Grass) GetConsoleSprite() rune {
@@ -30,8 +30,8 @@ func (g Grass) GetConsoleSprite() rune {
 	return '\U0001F340'
 }
 
-func (r Rock) CanMove() bool {
-	return false
+func (r Rock) New(c coordinates.Coordinates) Entity {
+	return &Rock{Coordinates: c}
 }
 
 func (r Rock) GetConsoleSprite() rune {
@@ -39,8 +39,8 @@ func (r Rock) GetConsoleSprite() rune {
 	return '\U0001FAA8'
 }
 
-func (t Tree) CanMove() bool {
-	return false
+func (t Tree) New(c coordinates.Coordinates) Entity {
+	return &Tree{Coordinates: c}
 }
 
 func (t Tree) GetConsoleSprite() rune {
