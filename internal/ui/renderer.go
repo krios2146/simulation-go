@@ -13,7 +13,7 @@ const errorSymbol = "❌"
 
 var emptySpace = strings.Repeat(" ", columnWidth)
 
-func Render(m world.Map) {
+func Render(m *world.Map) {
 	fmt.Println("┌" + strings.Repeat("─", int(m.Width)*columnWidth) + "┐")
 
 	for i := 0; i < int(m.Height); i++ {
