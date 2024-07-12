@@ -39,12 +39,6 @@ func (p Predator) GetConsoleSprite() rune {
 	return '\U0001F43A'
 }
 
-func (p Predator) String() string {
-	return fmt.Sprintf("predator: { coordinates: %v, speed: %v, attackRate: %v }",
-		p.Coordinates, p.Speed, p.AttackRating,
-	)
-}
-
 func (h Herbivore) New(c coordinates.Coordinates) Entity {
 	return &Herbivore{
 		Coordinates: c,
@@ -60,10 +54,4 @@ func (h *Herbivore) MakeMove() {
 func (h Herbivore) GetConsoleSprite() rune {
 	// 🐑
 	return '\U0001F411'
-}
-
-func (h Herbivore) String() string {
-	return fmt.Sprintf("coordinates: { coordinates: %v, speed: %v, health: %v }",
-		h.Coordinates, h.Speed, h.Health,
-	)
 }
