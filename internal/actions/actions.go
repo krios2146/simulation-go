@@ -52,7 +52,7 @@ func NewTurnAction() *TurnAction {
 }
 
 func (ta TurnAction) Perform(m *world.Map) {
-	creatures := world.FindByType(*new(entities.Creature), m)
+	creatures := world.FindByType(*new(entities.Creature), *m)
 
 	for _, c := range creatures {
 		path := ta.pathFinder.FindPath(*m, c, c.InteractsWith())

@@ -1,70 +1,46 @@
 package world
 
 import (
-	"github.com/krios2146/simulation-go/internal/coordinates"
+	"github.com/krios2146/simulation-go/internal"
 	"github.com/krios2146/simulation-go/internal/entities"
 )
 
 type Map struct {
-	values map[coordinates.Coordinates]entities.Entity
+	values map[internal.Coordinates]entities.Entity
 	Height uint8
 	Width  uint8
 }
 
 func NewMap(height uint8, width uint8) *Map {
 	return &Map{
-		values: map[coordinates.Coordinates]entities.Entity{},
+		values: map[internal.Coordinates]entities.Entity{},
 		Height: height,
 		Width:  width,
 	}
 }
 
-func (m *Map) IsEmpty(c coordinates.Coordinates) bool {
+func (m Map) IsEmpty(c internal.Coordinates) bool {
 	_, occupied := m.values[c]
 	return !occupied
 }
 
-func (m *Map) Find(coordinates coordinates.Coordinates) (entity entities.Entity, found bool) {
+func (m Map) Find(coordinates internal.Coordinates) (entity entities.Entity, found bool) {
 	entity, found = m.values[coordinates]
 	return
 }
 
-func (m *Map) FindCreatures() []entities.Creature {
-	creatures := []entities.Creature{}
+func FindByType[T entities.Entity](e T, m Map) []T {
+	entities := []T{}
 
 	for _, v := range m.values {
-		if c, ok := v.(entities.Creature); ok {
-			creatures = append(creatures, c)
+		if e, ok := v.(T); ok {
+			entities = append(entities, e)
 		}
 	}
 
-	return creatures
+	return entities
 }
 
-func (m *Map) FindHerbivores() []entities.Herbivore {
-	herbs := []entities.Herbivore{}
-
-	for _, v := range m.values {
-		if h, ok := v.(entities.Herbivore); ok {
-			herbs = append(herbs, h)
-		}
-	}
-
-	return herbs
-}
-
-func (m *Map) FindGrass() []entities.Grass {
-	herbs := []entities.Grass{}
-
-	for _, v := range m.values {
-		if h, ok := v.(entities.Grass); ok {
-			herbs = append(herbs, h)
-		}
-	}
-
-	return herbs
-}
-
-func (m *Map) Add(entity entities.Entity, coordinates coordinates.Coordinates) {
+func (m *Map) Add(entity entities.Entity, coordinates internal.Coordinates) {
 	m.values[coordinates] = entity
 }
