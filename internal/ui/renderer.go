@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/krios2146/simulation-go/internal/coordinates"
+	"github.com/krios2146/simulation-go/internal"
 	"github.com/krios2146/simulation-go/internal/world"
 )
 
@@ -20,7 +20,7 @@ func Render(m *world.Map) {
 		sb := strings.Builder{}
 
 		for j := 0; j < int(m.Width); j++ {
-			coordinates := coordinates.Coordinates{X: uint8(j), Y: uint8(i)}
+			coordinates := internal.Coordinates{X: uint8(j), Y: uint8(i)}
 			entity, found := m.Find(coordinates)
 
 			if !found {
