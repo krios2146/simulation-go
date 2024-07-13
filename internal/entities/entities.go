@@ -1,28 +1,30 @@
 package entities
 
-import (
-	"github.com/krios2146/simulation-go/internal/coordinates"
-)
+import "github.com/krios2146/simulation-go/internal"
 
 type Entity interface {
-	New(coordinates coordinates.Coordinates) Entity
+	New(internal internal.Coordinates) Entity
+	GetCoordinates() internal.Coordinates
 }
 
 type Grass struct {
-	coordinates.Coordinates
-	health uint8
+	internal.Coordinates
 }
 
 type Rock struct {
-	coordinates.Coordinates
+	internal.Coordinates
 }
 
 type Tree struct {
-	coordinates.Coordinates
+	internal.Coordinates
 }
 
-func (g Grass) New(c coordinates.Coordinates) Entity {
+func (g Grass) New(c internal.Coordinates) Entity {
 	return &Grass{Coordinates: c}
+}
+
+func (g Grass) GetCoordinates() internal.Coordinates {
+	return g.Coordinates
 }
 
 func (g Grass) GetConsoleSprite() rune {
@@ -30,8 +32,12 @@ func (g Grass) GetConsoleSprite() rune {
 	return '\U0001F340'
 }
 
-func (r Rock) New(c coordinates.Coordinates) Entity {
+func (r Rock) New(c internal.Coordinates) Entity {
 	return &Rock{Coordinates: c}
+}
+
+func (r Rock) GetCoordinates() internal.Coordinates {
+	return r.Coordinates
 }
 
 func (r Rock) GetConsoleSprite() rune {
@@ -39,8 +45,12 @@ func (r Rock) GetConsoleSprite() rune {
 	return '\U0001FAA8'
 }
 
-func (t Tree) New(c coordinates.Coordinates) Entity {
+func (t Tree) New(c internal.Coordinates) Entity {
 	return &Tree{Coordinates: c}
+}
+
+func (t Tree) GetCoordinates() internal.Coordinates {
+	return t.Coordinates
 }
 
 func (t Tree) GetConsoleSprite() rune {

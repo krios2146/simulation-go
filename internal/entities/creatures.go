@@ -1,28 +1,26 @@
 package entities
 
-import (
-	"fmt"
+import "github.com/krios2146/simulation-go/internal"
 
-	"github.com/krios2146/simulation-go/internal/coordinates"
-)
+type Creature interface {
+	New(c internal.Coordinates) Entity
+	InteractsWith() Entity
+	GetCoordinates() internal.Coordinates
+}
 
 type Predator struct {
-	Coordinates  coordinates.Coordinates
+	Coordinates  internal.Coordinates
 	Speed        uint8
 	AttackRating uint8
 }
 
 type Herbivore struct {
-	Coordinates coordinates.Coordinates
+	Coordinates internal.Coordinates
 	Speed       uint8
 	Health      uint8
 }
 
-type Creature interface {
-	MakeMove()
-}
-
-func (p Predator) New(c coordinates.Coordinates) Entity {
+func (p Predator) New(c internal.Coordinates) Entity {
 	return &Predator{
 		Coordinates:  c,
 		Speed:        2,
@@ -30,8 +28,12 @@ func (p Predator) New(c coordinates.Coordinates) Entity {
 	}
 }
 
-func (p *Predator) MakeMove() {
-	fmt.Println("Predator makes move")
+func (p Predator) InteractsWith() Entity {
+	return Herbivore{}
+}
+
+func (p Predator) GetCoordinates() internal.Coordinates {
+	return p.Coordinates
 }
 
 func (p Predator) GetConsoleSprite() rune {
@@ -39,7 +41,7 @@ func (p Predator) GetConsoleSprite() rune {
 	return '\U0001F43A'
 }
 
-func (h Herbivore) New(c coordinates.Coordinates) Entity {
+func (h Herbivore) New(c internal.Coordinates) Entity {
 	return &Herbivore{
 		Coordinates: c,
 		Speed:       1,
@@ -47,8 +49,12 @@ func (h Herbivore) New(c coordinates.Coordinates) Entity {
 	}
 }
 
-func (h *Herbivore) MakeMove() {
-	fmt.Println("Herbivore makes move")
+func (h Herbivore) InteractsWith() Entity {
+	return Grass{}
+}
+
+func (h Herbivore) GetCoordinates() internal.Coordinates {
+	return h.Coordinates
 }
 
 func (h Herbivore) GetConsoleSprite() rune {
