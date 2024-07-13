@@ -7,22 +7,22 @@ type Creature interface {
 }
 
 type Predator struct {
-	Coordinates  Coordinates
-	Speed        uint8
-	AttackRating uint8
+	coordinates  Coordinates
+	speed        uint8
+	attackRating uint8
 }
 
 type Herbivore struct {
-	Coordinates Coordinates
-	Speed       uint8
-	Health      uint8
+	coordinates Coordinates
+	speed       uint8
+	health      uint8
 }
 
 func (p Predator) New(c Coordinates) Entity {
 	return &Predator{
-		Coordinates:  c,
-		Speed:        2,
-		AttackRating: 50,
+		coordinates:  c,
+		speed:        2,
+		attackRating: 50,
 	}
 }
 
@@ -31,7 +31,7 @@ func (p Predator) InteractsWith() Entity {
 }
 
 func (p Predator) GetCoordinates() Coordinates {
-	return p.Coordinates
+	return p.coordinates
 }
 
 func (p Predator) GetConsoleSprite() rune {
@@ -41,9 +41,9 @@ func (p Predator) GetConsoleSprite() rune {
 
 func (h Herbivore) New(c Coordinates) Entity {
 	return &Herbivore{
-		Coordinates: c,
-		Speed:       1,
-		Health:      100,
+		coordinates: c,
+		speed:       1,
+		health:      100,
 	}
 }
 
@@ -52,7 +52,7 @@ func (h Herbivore) InteractsWith() Entity {
 }
 
 func (h Herbivore) GetCoordinates() Coordinates {
-	return h.Coordinates
+	return h.coordinates
 }
 
 func (h Herbivore) GetConsoleSprite() rune {
