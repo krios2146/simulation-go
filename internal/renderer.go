@@ -1,11 +1,8 @@
-package ui
+package internal
 
 import (
 	"fmt"
 	"strings"
-
-	"github.com/krios2146/simulation-go/internal"
-	"github.com/krios2146/simulation-go/internal/world"
 )
 
 const columnWidth = 2
@@ -13,14 +10,14 @@ const errorSymbol = "❌"
 
 var emptySpace = strings.Repeat(" ", columnWidth)
 
-func Render(m *world.Map) {
+func Render(m Map) {
 	fmt.Println("┌" + strings.Repeat("─", int(m.Width)*columnWidth) + "┐")
 
 	for i := 0; i < int(m.Height); i++ {
 		sb := strings.Builder{}
 
 		for j := 0; j < int(m.Width); j++ {
-			coordinates := internal.Coordinates{X: uint8(j), Y: uint8(i)}
+			coordinates := Coordinates{X: uint8(j), Y: uint8(i)}
 			entity, found := m.Find(coordinates)
 
 			if !found {
