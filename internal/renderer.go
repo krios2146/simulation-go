@@ -5,6 +5,10 @@ import (
 	"strings"
 )
 
+type ConsolePrintable interface {
+	GetConsoleSprite() rune
+}
+
 const columnWidth = 2
 const errorSymbol = "❌"
 
