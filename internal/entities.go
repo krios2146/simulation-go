@@ -18,40 +18,37 @@ type Tree struct {
 }
 
 func (g Grass) New(c Coordinates) Entity {
-	return &Grass{Coordinates: c}
+	return Grass{Coordinates: c}
 }
 
 func (g Grass) GetCoordinates() Coordinates {
 	return g.Coordinates
 }
 
-func (g Grass) GetConsoleSprite() rune {
-	// 🍀
-	return '\U0001F340'
+func (g Grass) GetConsoleSprite() string {
+	return "🍀"
 }
 
 func (r Rock) New(c Coordinates) Entity {
-	return &Rock{Coordinates: c}
+	return Rock{Coordinates: c}
 }
 
 func (r Rock) GetCoordinates() Coordinates {
 	return r.Coordinates
 }
 
-func (r Rock) GetConsoleSprite() rune {
-	// 🪨
-	return '\U0001FAA8'
+func (r Rock) GetConsoleSprite() string {
+	return "🪨"
 }
 
 func (t Tree) New(c Coordinates) Entity {
-	return &Tree{Coordinates: c}
+	return Tree{Coordinates: c}
 }
 
 func (t Tree) GetCoordinates() Coordinates {
 	return t.Coordinates
 }
 
-func (t Tree) GetConsoleSprite() rune {
-	// 🌳
-	return '\U0001F333'
+func (t Tree) GetConsoleSprite() string {
+	return "🌳"
 }
