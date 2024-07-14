@@ -36,9 +36,27 @@ func (m Map) IsValid(c Coordinates) bool {
 	return true
 }
 
-func (m Map) Find(coordinates Coordinates) (entity Entity, found bool) {
-	entity, found = m.values[coordinates]
-	return
+func (m *Map) Move(from Coordinates, to Coordinates) {
+	entity := m.values[from]
+	delete(m.values, from)
+	m.values[to] = entity
+}
+
+func (m *Map) Delete(from Coordinates) {
+	delete(m.values, from)
+}
+
+func Find[T Entity](m Map, coordinates Coordinates) (*T, bool) {
+	entity, found := m.values[coordinates]
+
+	if found {
+		if e, ok := entity.(T); ok {
+			return &e, found
+		}
+	}
+
+	var zeroValue T
+	return &zeroValue, found
 }
 
 func FindByType[T Entity](e T, m Map) []T {
