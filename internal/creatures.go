@@ -37,6 +37,9 @@ func (p Predator) GetCoordinates() Coordinates {
 }
 
 func (p *Predator) MakeMove(path []Coordinates, m *Map) {
+	if len(path) == 0 {
+		return
+	}
 	if len(path) > int(p.speed) {
 		moveTo := path[p.speed-1]
 		m.Move(p.coordinates, moveTo)
@@ -44,7 +47,12 @@ func (p *Predator) MakeMove(path []Coordinates, m *Map) {
 		return
 	}
 
-	closest := path[len(path)-2]
+	var closest Coordinates
+	if len(path) == 1 {
+		closest = path[0]
+	} else {
+		closest = path[len(path)-2]
+	}
 	m.Move(p.coordinates, closest)
 	p.coordinates = closest
 
@@ -78,6 +86,10 @@ func (h Herbivore) GetConsoleSprite() string {
 }
 
 func (h Herbivore) MakeMove(path []Coordinates, m *Map) {
+	if len(path) == 0 {
+		return
+	}
+
 	if len(path) > int(h.speed) {
 		moveTo := path[h.speed-1]
 		m.Move(h.coordinates, moveTo)
@@ -85,7 +97,12 @@ func (h Herbivore) MakeMove(path []Coordinates, m *Map) {
 		return
 	}
 
-	closest := path[len(path)-2]
+	var closest Coordinates
+	if len(path) == 1 {
+		closest = path[0]
+	} else {
+		closest = path[len(path)-2]
+	}
 	m.Move(h.coordinates, closest)
 	h.coordinates = closest
 
