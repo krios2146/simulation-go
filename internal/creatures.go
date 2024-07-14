@@ -57,7 +57,7 @@ func (p *Predator) MakeMove(path []Coordinates, m *Map) {
 	p.coordinates = closest
 
 	if herbivore, found := Find[Herbivore](*m, path[len(path)-1]); found {
-		herbivore.health = herbivore.health - p.attackRating
+		herbivore.health -= p.attackRating
 	}
 }
 
@@ -107,4 +107,5 @@ func (h Herbivore) MakeMove(path []Coordinates, m *Map) {
 	h.coordinates = closest
 
 	m.Delete(path[len(path)-1])
+	h.health += 25
 }
