@@ -6,6 +6,10 @@ type Map struct {
 	Width  uint8
 }
 
+type Coordinates struct {
+	X, Y uint8
+}
+
 func NewMap(height uint8, width uint8) *Map {
 	return &Map{
 		values: map[Coordinates]Entity{},
@@ -17,6 +21,19 @@ func NewMap(height uint8, width uint8) *Map {
 func (m Map) IsEmpty(c Coordinates) bool {
 	_, occupied := m.values[c]
 	return !occupied
+}
+
+func (m Map) IsValid(c Coordinates) bool {
+	if c.X >= m.Width {
+		return false
+	}
+	if c.Y >= m.Height {
+		return false
+	}
+	if c.X < 0 || c.Y < 0 {
+		return false
+	}
+	return true
 }
 
 func (m Map) Find(coordinates Coordinates) (entity Entity, found bool) {
