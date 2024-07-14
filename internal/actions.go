@@ -51,10 +51,6 @@ func (ta TurnAction) Perform(m *Map) {
 
 	for _, c := range creatures {
 		path := ta.pathFinder.FindPath(*m, c, c.InteractsWith())
-		makeMove(path, m, c)
+		c.MakeMove(path, m)
 	}
-}
-
-func makeMove(path []Coordinates, m *Map, creature Creature) {
-	panic("`makeMove` not implemented")
 }
