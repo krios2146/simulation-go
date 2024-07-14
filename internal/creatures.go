@@ -4,12 +4,14 @@ type Creature interface {
 	New(c Coordinates) Entity
 	InteractsWith() Entity
 	GetCoordinates() Coordinates
+	MakeMove(p []Coordinates, m *Map)
 }
 
 type Predator struct {
-	coordinates  Coordinates
-	speed        uint8
-	attackRating uint8
+	coordinates   Coordinates
+	speed         uint8
+	attackRating  uint8
+	interactsWith Herbivore
 }
 
 type Herbivore struct {
@@ -19,7 +21,7 @@ type Herbivore struct {
 }
 
 func (p Predator) New(c Coordinates) Entity {
-	return &Predator{
+	return Predator{
 		coordinates:  c,
 		speed:        2,
 		attackRating: 50,
@@ -34,13 +36,29 @@ func (p Predator) GetCoordinates() Coordinates {
 	return p.coordinates
 }
 
-func (p Predator) GetConsoleSprite() rune {
-	// 🐺
-	return '\U0001F43A'
+func (p *Predator) MakeMove(path []Coordinates, m *Map) {
+	if len(path) > int(p.speed) {
+		moveTo := path[p.speed-1]
+		m.Move(p.coordinates, moveTo)
+		p.coordinates = moveTo
+		return
+	}
+
+	closest := path[len(path)-1]
+	m.Move(p.coordinates, closest)
+	p.coordinates = closest
+
+	if herbivore, found := Find[Herbivore](*m, path[len(path)]); found {
+		herbivore.health = herbivore.health - p.attackRating
+	}
+}
+
+func (p Predator) GetConsoleSprite() string {
+	return "🐺"
 }
 
 func (h Herbivore) New(c Coordinates) Entity {
-	return &Herbivore{
+	return Herbivore{
 		coordinates: c,
 		speed:       1,
 		health:      100,
@@ -55,7 +73,21 @@ func (h Herbivore) GetCoordinates() Coordinates {
 	return h.coordinates
 }
 
-func (h Herbivore) GetConsoleSprite() rune {
-	// 🐑
-	return '\U0001F411'
+func (h Herbivore) GetConsoleSprite() string {
+	return "🐑"
+}
+
+func (h Herbivore) MakeMove(path []Coordinates, m *Map) {
+	if len(path) > int(h.speed) {
+		moveTo := path[h.speed-1]
+		m.Move(h.coordinates, moveTo)
+		h.coordinates = moveTo
+		return
+	}
+
+	closest := path[len(path)-1]
+	m.Move(h.coordinates, closest)
+	h.coordinates = closest
+
+	m.Delete(path[len(path)])
 }
