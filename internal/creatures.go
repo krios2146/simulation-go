@@ -1,10 +1,10 @@
 package internal
 
 type Creature interface {
-	New(c Coordinates) Entity
+	Entity
+	New(Coordinates) Entity
 	InteractsWith() Entity
-	GetCoordinates() Coordinates
-	MakeMove(p []Coordinates, m *Map)
+	MakeMove([]Coordinates, *Map)
 }
 
 type Predator struct {
@@ -85,7 +85,7 @@ func (h Herbivore) GetConsoleSprite() string {
 	return "🐑"
 }
 
-func (h Herbivore) MakeMove(path []Coordinates, m *Map) {
+func (h *Herbivore) MakeMove(path []Coordinates, m *Map) {
 	if len(path) == 0 {
 		return
 	}
