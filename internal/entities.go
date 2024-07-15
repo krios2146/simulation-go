@@ -1,7 +1,6 @@
 package internal
 
 type Entity interface {
-	New(Coordinates) Entity
 	GetCoordinates() Coordinates
 }
 
