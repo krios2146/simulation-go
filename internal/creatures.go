@@ -14,9 +14,10 @@ type Predator struct {
 }
 
 type Herbivore struct {
-	coordinates Coordinates
-	speed       uint8
-	health      uint8
+	coordinates   Coordinates
+	speed         uint8
+	health        uint8
+	interactsWith Grass
 }
 
 func (p Predator) GetCoordinates() Coordinates {
@@ -32,36 +33,44 @@ func (p Predator) New(c Coordinates) Entity {
 }
 
 func (p Predator) InteractsWith() Entity {
-	return Herbivore{}
+	return p.interactsWith
 }
 
 func (p *Predator) MakeMove(path []Coordinates, m *Map) {
 	if len(path) == 0 {
 		return
 	}
-	if len(path) > int(p.speed) {
-		moveTo := path[p.speed-1]
-		m.Move(p.coordinates, moveTo)
-		p.coordinates = moveTo
-		return
-	}
 
-	var closest Coordinates
-	if len(path) == 1 {
-		closest = path[0]
-	} else {
-		closest = path[len(path)-2]
-	}
-	m.Move(p.coordinates, closest)
-	p.coordinates = closest
+	switch {
+	case len(path) > int(p.speed):
+		step := path[p.speed-1]
+		p.move(step, m)
 
-	if herbivore, found := Find[Herbivore](*m, path[len(path)-1]); found {
-		herbivore.health -= p.attackRating
+	case len(path) > 1:
+		nearFood := path[len(path)-2]
+		prey := path[len(path)-1]
+		p.move(nearFood, m)
+		p.attack(prey, m)
+
+	default:
+		prey := path[len(path)-1]
+		p.attack(prey, m)
 	}
 }
 
 func (p Predator) GetConsoleSprite() string {
 	return "🐺"
+}
+
+func (p *Predator) move(c Coordinates, m *Map) {
+	m.Move(p.coordinates, c)
+	p.coordinates = c
+}
+
+func (p *Predator) attack(c Coordinates, m *Map) {
+	if herbivore, found := Find[Herbivore](*m, c); found {
+		herbivore.health -= p.attackRating
+	}
 }
 
 func (h Herbivore) GetCoordinates() Coordinates {
@@ -77,7 +86,7 @@ func (h Herbivore) New(c Coordinates) Entity {
 }
 
 func (h Herbivore) InteractsWith() Entity {
-	return Grass{}
+	return h.interactsWith
 }
 
 func (h Herbivore) GetConsoleSprite() string {
@@ -89,22 +98,29 @@ func (h *Herbivore) MakeMove(path []Coordinates, m *Map) {
 		return
 	}
 
-	if len(path) > int(h.speed) {
-		moveTo := path[h.speed-1]
-		m.Move(h.coordinates, moveTo)
-		h.coordinates = moveTo
-		return
-	}
+	switch {
+	case len(path) > int(h.speed):
+		step := path[h.speed-1]
+		h.move(step, m)
 
-	var closest Coordinates
-	if len(path) == 1 {
-		closest = path[0]
-	} else {
-		closest = path[len(path)-2]
-	}
-	m.Move(h.coordinates, closest)
-	h.coordinates = closest
+	case len(path) > 1:
+		nearFood := path[len(path)-2]
+		food := path[len(path)-1]
+		h.move(nearFood, m)
+		h.eat(food, m)
 
-	m.Delete(path[len(path)-1])
+	default:
+		food := path[len(path)-1]
+		h.eat(food, m)
+	}
+}
+
+func (h *Herbivore) move(c Coordinates, m *Map) {
+	m.Move(h.coordinates, c)
+	h.coordinates = c
+}
+
+func (h *Herbivore) eat(c Coordinates, m *Map) {
+	m.Delete(c)
 	h.health += 25
 }
