@@ -2,22 +2,19 @@ package internal
 
 type Creature interface {
 	Entity
-	InteractsWith() Entity
 	MakeMove([]Coordinates, *Map)
 }
 
 type Predator struct {
-	coordinates   Coordinates
-	speed         uint8
-	attackRating  uint8
-	interactsWith Herbivore
+	coordinates  Coordinates
+	speed        uint8
+	attackRating uint8
 }
 
 type Herbivore struct {
-	coordinates   Coordinates
-	speed         uint8
-	health        uint8
-	interactsWith Grass
+	coordinates Coordinates
+	speed       uint8
+	health      uint8
 }
 
 func (p Predator) GetCoordinates() Coordinates {
@@ -30,10 +27,6 @@ func (p Predator) New(c Coordinates) Entity {
 		speed:        2,
 		attackRating: 50,
 	}
-}
-
-func (p Predator) InteractsWith() Entity {
-	return p.interactsWith
 }
 
 func (p *Predator) MakeMove(path []Coordinates, m *Map) {
@@ -83,10 +76,6 @@ func (h Herbivore) New(c Coordinates) Entity {
 		speed:       1,
 		health:      100,
 	}
-}
-
-func (h Herbivore) InteractsWith() Entity {
-	return h.interactsWith
 }
 
 func (h Herbivore) GetConsoleSprite() string {
