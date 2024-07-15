@@ -59,7 +59,7 @@ func Find[T Entity](m Map, coordinates Coordinates) (*T, bool) {
 	return &zeroValue, found
 }
 
-func FindByType[T Entity](e T, m Map) []T {
+func FindByType[T Entity](m Map) []T {
 	entities := []T{}
 
 	for _, v := range m.values {
