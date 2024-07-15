@@ -6,7 +6,7 @@ import (
 )
 
 type ConsolePrintable interface {
-	GetConsoleSprite() rune
+	GetConsoleSprite() string
 }
 
 const columnWidth = 2
@@ -22,15 +22,16 @@ func Render(m Map) {
 
 		for j := 0; j < int(m.Width); j++ {
 			coordinates := Coordinates{X: uint8(j), Y: uint8(i)}
-			entity, found := m.Find(coordinates)
+			entityp, found := Find[Entity](m, coordinates)
 
 			if !found {
 				sb.WriteString(emptySpace)
 				continue
 			}
+			entity := *entityp
 
 			if entity, ok := entity.(ConsolePrintable); ok {
-				sb.WriteRune(entity.GetConsoleSprite())
+				sb.WriteString(entity.GetConsoleSprite())
 			} else {
 				sb.WriteString(errorSymbol)
 			}
