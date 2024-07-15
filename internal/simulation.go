@@ -28,25 +28,25 @@ func (s Simulation) Start() {
 		Render(s.worldMap)
 		time.Sleep(time.Second)
 	}
+
+	fmt.Println("Simulation is over")
 }
 
 func initActions() []Action {
 	initActions := []Action{}
 
-	initActions = append(initActions, NewSpawnAction(Herbivore{}, 1))
-	initActions = append(initActions, NewSpawnAction(Predator{}, 0))
-	initActions = append(initActions, NewSpawnAction(Grass{}, 1))
-	initActions = append(initActions, NewSpawnAction(Rock{}, 0))
-	initActions = append(initActions, NewSpawnAction(Tree{}, 0))
+	initActions = append(initActions, NewSpawnAction[Herbivore](1))
+	initActions = append(initActions, NewSpawnAction[Predator](1))
+	initActions = append(initActions, NewSpawnAction[Grass](0))
+	initActions = append(initActions, NewSpawnAction[Rock](0))
+	initActions = append(initActions, NewSpawnAction[Tree](0))
 
 	return initActions
 }
 
 func isOver(m Map) bool {
-	if len(FindByType[Herbivore](m)) == 0 {
+	if len(FindByType[*Herbivore](m)) == 0 {
 		return true
-	} else {
-		fmt.Printf("[isOver]: found more than zero Herbivore with `FindByType` call\n")
 	}
 	if len(FindByType[Grass](m)) == 0 {
 		return true
