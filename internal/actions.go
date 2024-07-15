@@ -8,15 +8,19 @@ type Action interface {
 	Perform(m *Map)
 }
 
-type SpawnAction[T Entity] struct {
+type SpawnAction[T Spawnable] struct {
 	amount uint8
+}
+
+type Spawnable interface {
+	New(Coordinates) Entity
 }
 
 type TurnAction struct {
 	pathFinder PathFinder
 }
 
-func NewSpawnAction[T Entity](t T, amount uint8) *SpawnAction[T] {
+func NewSpawnAction[T Spawnable](amount uint8) *SpawnAction[T] {
 	return &SpawnAction[T]{
 		amount: amount,
 	}
