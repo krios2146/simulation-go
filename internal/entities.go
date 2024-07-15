@@ -2,6 +2,7 @@ package internal
 
 type Entity interface {
 	GetCoordinates() Coordinates
+	Spawnable
 }
 
 type Grass struct {
