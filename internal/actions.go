@@ -16,9 +16,7 @@ type Spawnable interface {
 	New(Coordinates) Entity
 }
 
-type TurnAction struct {
-	pathFinder PathFinder
-}
+type TurnAction struct{}
 
 func NewSpawnAction[T Spawnable](amount uint8) *SpawnAction[T] {
 	return &SpawnAction[T]{
@@ -45,16 +43,13 @@ func (sa SpawnAction[T]) Perform(m *Map) {
 }
 
 func NewTurnAction() *TurnAction {
-	return &TurnAction{
-		pathFinder: &BFSPathFinder{},
-	}
+	return &TurnAction{}
 }
 
 func (ta TurnAction) Perform(m *Map) {
 	creatures := FindByType[Creature](*m)
 
 	for _, c := range creatures {
-		path := ta.pathFinder.FindPath(*m, c, c.InteractsWith())
-		c.MakeMove(path, m)
+		c.MakeMove(m)
 	}
 }
