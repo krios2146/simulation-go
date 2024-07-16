@@ -2,19 +2,21 @@ package internal
 
 type Creature interface {
 	Entity
-	MakeMove([]Coordinates, *Map)
+	MakeMove(*Map)
 }
 
 type Predator struct {
 	coordinates  Coordinates
 	speed        uint8
 	attackRating uint8
+	pathFinder   PathFinder[Entity]
 }
 
 type Herbivore struct {
 	coordinates Coordinates
 	speed       uint8
 	health      uint8
+	pathFinder  PathFinder[Entity]
 }
 
 func (p Predator) GetCoordinates() Coordinates {
@@ -25,11 +27,14 @@ func (p Predator) New(c Coordinates) Entity {
 	return &Predator{
 		coordinates:  c,
 		speed:        2,
-		attackRating: 50,
+		attackRating: 25,
+		pathFinder:   NewBFSPathFinder[*Herbivore](),
 	}
 }
 
-func (p *Predator) MakeMove(path []Coordinates, m *Map) {
+func (p *Predator) MakeMove(m *Map) {
+	path := p.pathFinder.FindPath(*m, p.coordinates)
+
 	if len(path) == 0 {
 		return
 	}
@@ -61,8 +66,16 @@ func (p *Predator) move(c Coordinates, m *Map) {
 }
 
 func (p *Predator) attack(c Coordinates, m *Map) {
-	if herbivore, found := Find[Herbivore](*m, c); found {
-		herbivore.health -= p.attackRating
+	if herbivore, found := Find[*Herbivore](*m, c); found {
+		if p.attackRating > herbivore.health {
+			herbivore.health = 0
+		} else {
+			herbivore.health -= p.attackRating
+		}
+
+		if herbivore.health <= 0 {
+			m.Delete(c)
+		}
 	}
 }
 
@@ -75,6 +88,7 @@ func (h Herbivore) New(c Coordinates) Entity {
 		coordinates: c,
 		speed:       1,
 		health:      100,
+		pathFinder:  NewBFSPathFinder[Grass](),
 	}
 }
 
@@ -82,7 +96,9 @@ func (h Herbivore) GetConsoleSprite() string {
 	return "🐑"
 }
 
-func (h *Herbivore) MakeMove(path []Coordinates, m *Map) {
+func (h *Herbivore) MakeMove(m *Map) {
+	path := h.pathFinder.FindPath(*m, h.coordinates)
+
 	if len(path) == 0 {
 		return
 	}
